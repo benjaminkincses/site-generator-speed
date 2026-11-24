@@ -23,8 +23,15 @@ const byCodeUnits = (a, b) => (a < b ? -1 : a > b ? 1 : 0);
 
 /** The words of a body: its runs of characters other than whitespace. */
 function wordsOf(text) {
-  const m = text.match(/\S+/g);
-  return m === null ? 0 : m.length;
+  let count = 0;
+  let inWord = false;
+  for (let i = 0; i < text.length; i++) {
+    const c = text.charCodeAt(i);
+    const blank = c === 32 || (c >= 9 && c <= 13) || (c > 127 && /\s/.test(text[i]));
+    if (!blank && !inWord) count++;
+    inWord = !blank;
+  }
+  return count;
 }
 
 /** `rel` (a link's path, "/"-separated) from the directory `dir` of a source, or null when it climbs out of the root. */
